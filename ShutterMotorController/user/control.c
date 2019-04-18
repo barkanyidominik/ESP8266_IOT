@@ -71,7 +71,7 @@ static void reach_the_limit() {
 
 static void upButton_intr_handler()
 {
-    buttons.upButton_flag ^= 1;
+    buttons.upButton_flag ^= 1u;
 
     if (buttons.upButton_flag)
     { // Gomb lenyomás történt
@@ -100,7 +100,7 @@ static void upButton_intr_handler()
 
 static void downButton_intr_handler()
 {
-    buttons.downButton_flag ^= 1;
+    buttons.downButton_flag ^= 1u;
 
     if (buttons.downButton_flag)
     { // Gomb lenyomás történt
@@ -133,13 +133,13 @@ static void gpio_intr_handler()
 
     ETS_GPIO_INTR_DISABLE();
 
-    if( gpio_status & BIT(0) )
+    if( gpio_status & BIT(0u) ) // 0u - 0 Unsigned, because operand with binary bitwise operator
     {
         gpio_pin_intr_state_set(GPIO_ID_PIN(0), GPIO_PIN_INTR_DISABLE);
         upButton_intr_handler();
         os_timer_arm(&buttons.upButton_timer, 50, 0);
     }
-    else if( gpio_status & BIT(2) )
+    else if( gpio_status & BIT(2u) )
     {
         gpio_pin_intr_state_set(GPIO_ID_PIN(2), GPIO_PIN_INTR_DISABLE);
         downButton_intr_handler();

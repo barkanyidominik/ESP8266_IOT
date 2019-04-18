@@ -7,8 +7,8 @@
 
 typedef struct
 {
-    char upButton_flag;
-    char downButton_flag;
+    uint8_t upButton_flag;
+    uint8_t downButton_flag;
     int32_t upButton_offset;
     int32_t downButton_offset;
     os_timer_t upButton_timer;

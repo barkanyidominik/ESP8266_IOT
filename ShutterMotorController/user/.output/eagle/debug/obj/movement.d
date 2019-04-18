@@ -16,4 +16,5 @@
  /home/barkanyi/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/cdefs.h \
  /home/barkanyi/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/string.h \
  ../../include/os_type.h ../../include/ets_sys.h ../../include/c_types.h \
- ../../include/eagle_soc.h ../include/user_config.h ../include/movement.h
+ ../../include/eagle_soc.h ../include/user_config.h ../include/movement.h \
+ ../../include/gpio.h
