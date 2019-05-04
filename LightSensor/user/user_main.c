@@ -175,6 +175,7 @@ initMeasureTask()
 
     state = INDEFINITE;
 
+    os_timer_disarm(&measureTaskTimer);     //Ha reconnect történne a brókerre, akkor újra meg lesz hívva az initMeasureTask, ezért disarmoljuk az előző MeasureTask-ot.
     os_timer_setfn(&measureTaskTimer, (os_timer_func_t*) measureTask, 0);
     os_timer_arm(&measureTaskTimer, 50, 1);
 

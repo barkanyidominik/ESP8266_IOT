@@ -81,6 +81,7 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
     dataBuf[data_len] = 0;
 
     INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+    os_printf("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
     os_free(topicBuf);
     os_free(dataBuf);
 }
@@ -117,17 +118,21 @@ ICACHE_FLASH_ATTR void mqttInit(void)
     //MQTT_OnPublished(&mqttClient, mqttPublishedCb);
     //MQTT_OnData(&mqttClient, mqttDataCb);
 
-    MQTT_InitConnection(&mqttClient, "192.168.1.60", 1883, 0);
+    MQTT_InitConnection(&mqttClient, "192.168.100.33", 1883, 0);
 
     MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 60, 1);
 
-    MQTT_InitLWT(&mqttClient, "light/status", "Offline", 0, 1);
+    MQTT_InitLWT(&mqttClient, "light.status", "Offline", 0, 1);
 
     MQTT_OnConnected(&mqttClient, mqttConnectedCb);
 
     WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
-    MQTT_Publish(&mqttClient, "light/status", "Online", 6, 0, 1);
+    MQTT_Publish(&mqttClient, "light.status", "Online", 6, 0, 1);
+
+    MQTT_Subscribe(&mqttClient, "light.teszt", 1);
+
+    MQTT_OnData(&mqttClient, mqttDataCb);
 
     INFO("\r\nSystem started ...\r\n");
 }

@@ -15,6 +15,7 @@ typedef enum
 } ProgrammingState;
 
 static ButtonsStatus buttons;
+static Movement movement;
 static ProgrammingState programmingState;
 static int32_t limit;
 static void(*setLimitsCb)();
@@ -73,13 +74,13 @@ static void upButton_intr_handler()
             if (!buttons.upButton_flag) {
                 DEBUG("\t\tUP START\n");
                 buttons.upButton_flag = 1;
-                buttons.upButton_offset = WDEV_NOW();
+                movement.up_offset = WDEV_NOW();
             } else {
                 DEBUG("\t\tUP END\n");
                 buttons.upButton_flag = 0;
-                limit += WDEV_NOW() - buttons.upButton_offset;
+                limit += WDEV_NOW() - movement.up_offset;
 
-                float num = (float) (WDEV_NOW() - buttons.upButton_offset) / 1000000.0;
+                float num = (float) (WDEV_NOW() - movement.up_offset) / 1000000.0;
                 DEBUG("\tUp: + %d.%d seconds\n\r", (int) num, (int) ((num - (int) num) * 100));
             }
             break;
@@ -107,13 +108,13 @@ static void downButton_intr_handler()
             if (!buttons.downButton_flag) {
                 DEBUG("\t\tDOWN START\n");
                 buttons.downButton_flag = 1;
-                buttons.downButton_offset = WDEV_NOW();
+                movement.down_offset = WDEV_NOW();
             } else {
                 DEBUG("\t\tDOWN END\n");
                 buttons.downButton_flag = 0;
-                limit -= WDEV_NOW() - buttons.downButton_offset;
+                limit -= WDEV_NOW() - movement.down_offset;
 
-                float num = (float) (WDEV_NOW() - buttons.downButton_offset) / 1000000.0;
+                float num = (float) (WDEV_NOW() - movement.down_offset) / 1000000.0;
                 DEBUG("\tDown: - %d.%d seconds\n\r", (int) num, (int) ((num - (int) num) * 100));
             }
             break;

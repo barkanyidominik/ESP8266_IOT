@@ -22,7 +22,9 @@ GEN_IMAGES= eagle.app.v6.out
 GEN_BINS= eagle.app.v6.bin
 SPECIAL_MKTARGETS=$(APP_MKTARGETS)
 SUBDIRS=    \
-    user
+    user    \
+    mqtt    \
+    modules
 
 endif # } PDIR
 
@@ -46,7 +48,9 @@ ifeq ($(FLAVOR),release)
 endif
 
 COMPONENTS_eagle.app.v6 = \
-    user/libuser.a
+    user/libuser.a  \
+    mqtt/libmqtt.a  \
+    modules/libmodules.a
 
 
 #   Ignore undefined reference
@@ -72,6 +76,8 @@ LINKFLAGS_eagle.app.v6 = \
     -lcrypto    \
     -lmain  \
     -ldriver	\
+    -lssl	\
+    -lm     \
     $(DEP_LIBS_eagle.app.v6)                    \
     -Wl,--end-group
 
@@ -116,7 +122,7 @@ DDEFINES +=             \
 # Required for each makefile to inherit from the parent
 #
 
-INCLUDES := $(INCLUDES) -I $(PDIR)include
+INCLUDES := $(INCLUDES) -I $(PDIR)include -I $(PDIR)include/mqtt -I $(PDIR)include/modules
 PDIR := ../$(PDIR)
 sinclude $(PDIR)Makefile
 

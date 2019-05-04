@@ -19,4 +19,5 @@
  ../../include/eagle_soc.h ../include/user_config.h \
  ../../include/user_interface.h ../../include/ip_addr.h \
  ../../include/queue.h ../../include/spi_flash.h ../../include/gpio.h \
- ../include/control.h ../include/movement.h
+ ../include/control.h ../include/movement.h \
+ /home/barkanyi/esp-open-sdk/xtensa-lx106-elf/xtensa-lx106-elf/include/math.h
