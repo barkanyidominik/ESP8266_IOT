@@ -136,14 +136,14 @@ measureTask(os_event_t *events)
     uint16_t value = (uint16_t)((1024-average)/10.24);  // Átalakítjuk %-os formára.
 
     if(state == STAGNATE){
-        if(max - min > 5 || abs(lastValue - value) > 5) {
+        if(max - min > 10 || abs(lastValue - value) > 10) {
             state = INDEFINITE;
             os_printf("STAGNATE -> INDEFINITE\n");
         }
     }
     else if(state == MODULATE)
     {
-        if(max - min < 5)
+        if(max - min < 10)
         {
             state = INDEFINITE;
             os_printf("MODULATE -> INDEFINITE\n");
@@ -151,13 +151,15 @@ measureTask(os_event_t *events)
     }
     else if(state == INDEFINITE)
     {
-        if(max - min < 5)
+        if(max - min < 10)
         {
             state = STAGNATE;
             os_printf("INDEFINITE -> STAGNATE\n");
-            os_printf("\tValue: %d\n", value);
-            os_sprintf(printbuf, "%d", value);
-            mqttPublishLight(printbuf);
+            if(lastValue != value){
+                os_printf("\tValue: %d\n", value);
+                os_sprintf(printbuf, "%d", value);
+                mqttPublishLight(printbuf);
+            }
             lastValue = value;
         }
         else

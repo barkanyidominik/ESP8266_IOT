@@ -1,0 +1,67 @@
+gen_misc.sh version 20150511
+
+Please follow below steps(1-5) to generate specific bin(s):
+STEP 1: choose boot version(0=boot_v1.1, 1=boot_v1.2+, 2=none)
+enter(0/1/2, default 2):
+boot mode: none
+
+STEP 2: choose bin generate(0=eagle.flash.bin+eagle.irom0text.bin, 1=user1.bin, 2=user2.bin)
+enter (0/1/2, default 0):
+generate bin: eagle.flash.bin+eagle.irom0text.bin
+
+STEP 3: choose spi speed(0=20MHz, 1=26.7MHz, 2=40MHz, 3=80MHz)
+enter (0/1/2/3, default 2):
+spi speed: 40 MHz
+
+STEP 4: choose spi mode(0=QIO, 1=QOUT, 2=DIO, 3=DOUT)
+enter (0/1/2/3, default 0):
+spi mode: QIO
+
+STEP 5: choose spi size and map
+    0= 512KB( 256KB+ 256KB)
+    2=1024KB( 512KB+ 512KB)
+    3=2048KB( 512KB+ 512KB)
+    4=4096KB( 512KB+ 512KB)
+    5=2048KB(1024KB+1024KB)
+    6=4096KB(1024KB+1024KB)
+enter (0/2/3/4/5/6, default 0):
+spi size: 1024KB
+spi ota map:  512KB + 512KB
+
+
+start...
+
+make[1]: Entering directory '/home/devlinux/dev/eclipse_neon_workspace/esp8266_example_workspace/simple_pair/user'
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../../include/ets -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include user_main.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../../include/ets -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/user_main.o -c user_main.c
+xtensa-lx106-elf-ar ru .output/eagle/debug/lib/libuser.a .output/eagle/debug/obj/user_main.o 
+make[1]: Leaving directory '/home/devlinux/dev/eclipse_neon_workspace/esp8266_example_workspace/simple_pair/user'
+make[1]: Entering directory '/home/devlinux/dev/eclipse_neon_workspace/esp8266_example_workspace/simple_pair/driver'
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include spi_overlap.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include i2c_master.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include key.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include spi.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include gpio16.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include uart.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include spi_interface.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include hw_timer.c
+DEPEND: xtensa-lx106-elf-gcc -M -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf -DICACHE_FLASH -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include sdio_slv.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/sdio_slv.o -c sdio_slv.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/hw_timer.o -c hw_timer.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/spi_interface.o -c spi_interface.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/uart.o -c uart.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/gpio16.o -c gpio16.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/spi.o -c spi.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/key.o -c key.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/i2c_master.o -c i2c_master.c
+xtensa-lx106-elf-gcc -Os -g -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections -fno-builtin-printf  -DICACHE_FLASH   -I include -I ./ -I ../include -I ../../include -I ../../include/eagle -I ../../driver_lib/include  -o .output/eagle/debug/obj/spi_overlap.o -c spi_overlap.c
+xtensa-lx106-elf-ar ru .output/eagle/debug/lib/libdriver.a .output/eagle/debug/obj/sdio_slv.o .output/eagle/debug/obj/hw_timer.o .output/eagle/debug/obj/spi_interface.o .output/eagle/debug/obj/uart.o .output/eagle/debug/obj/gpio16.o .output/eagle/debug/obj/spi.o .output/eagle/debug/obj/key.o .output/eagle/debug/obj/i2c_master.o .output/eagle/debug/obj/spi_overlap.o 
+make[1]: Leaving directory '/home/devlinux/dev/eclipse_neon_workspace/esp8266_example_workspace/simple_pair/driver'
+xtensa-lx106-elf-gcc  -L../lib -nostdlib -T../ld/eagle.app.v6.ld -Wl,--no-check-sections -Wl,--gc-sections -u call_user_start -Wl,-static -Wl,--start-group -lc -lgcc -lhal -lphy -lpp -lnet80211 -llwip -lwpa -lmain -lespnow -lcrypto user/.output/eagle/debug/lib/libuser.a driver/.output/eagle/debug/lib/libdriver.a -Wl,--end-group -o .output/eagle/debug/image/eagle.app.v6.out 
+
+!!!
+No boot needed.
+Generate eagle.flash.bin and eagle.irom0text.bin successully in folder bin.
+eagle.flash.bin-------->0x00000
+eagle.irom0text.bin---->0x10000
+!!!

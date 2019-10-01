@@ -53,10 +53,10 @@ void mqttConnectedCb(uint32_t *args)
 
     MQTT_Client* client = (MQTT_Client*)args;
 
-    MQTT_Publish(&mqttClient, "shutter.status", "Online", 6, 1, 1);
+    MQTT_Publish(&mqttClient, MQTT_LWT_TOPIC, MQTT_CONNECT_MESSAGE, sizeof(MQTT_CONNECT_MESSAGE), 1, 1);
 
-    MQTT_Subscribe(&mqttClient, "shutter.control", 1);
-    MQTT_Subscribe(&mqttClient, "shutter.position.control", 1);
+    MQTT_Subscribe(&mqttClient, MQTT_CONTROL_MOVE_TOPIC, 1);
+    MQTT_Subscribe(&mqttClient, MQTT_CONTROL_POSITION_TOPIC, 1);
 
     INFO("MQTT: Connected\r\n");
 }
@@ -83,31 +83,21 @@ ICACHE_FLASH_ATTR void setMqttConnectedCb(void *cb)
 ICACHE_FLASH_ATTR void mqttPublish(char* topic, char* data)
 {
     INFO("Publish data: %s!!!", data);
-    MQTT_Publish(&mqttClient, topic, data, strlen(data), 1, 0);
+    MQTT_Publish(&mqttClient, topic, data, strlen(data), 1, 1);
 }
 
 ICACHE_FLASH_ATTR void mqttInit(void* mqttDataCb)
 {
-    //uart_init(BIT_RATE_115200, BIT_RATE_115200);
     os_delay_us(60000);
     mqttHandler.mqttState = MQTT_INIT;
 
-    //MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, sysCfg.security);
-    //MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
-    //MQTT_InitLWT(&mqttClient, "/lwt", "offline", 0, 0);
-    //MQTT_OnConnected(&mqttClient, mqttConnectedCb);
-    //MQTT_OnDisconnected(&mqttClient, mqttDisconnectedCb);
-    //MQTT_OnPublished(&mqttClient, mqttPublishedCb);
-    //MQTT_OnData(&mqttClient, mqttDataCb);
-
-
     CFG_Load();
 
-    MQTT_InitConnection(&mqttClient, "192.168.100.33", 1883, 0);
+    MQTT_InitConnection(&mqttClient, MQTT_HOST, MQTT_PORT, 0);
 
-    MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 60, 1);
+    MQTT_InitClient(&mqttClient, MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS, 60, 0);
 
-    MQTT_InitLWT(&mqttClient, "shutter.status", "Offline", 1, 1);
+    MQTT_InitLWT(&mqttClient, MQTT_LWT_TOPIC, MQTT_LWT_MESSAGE, 1, 1);
 
     MQTT_OnConnected(&mqttClient, mqttConnectedCb);
 

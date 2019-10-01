@@ -15,13 +15,17 @@ typedef enum{
 
 /*DEFAULT CONFIGURATIONS*/
 
-#define MQTT_HOST            "80.211.181.235" // the IP address or domain name of your MQTT server or MQTT broker ,such as "mqtt.yourdomain.com"
+#define MQTT_HOST            "smarthomegui.com" // the IP address or domain name of your MQTT server or MQTT broker ,such as "mqtt.yourdomain.com"
 #define MQTT_PORT            1883    // the listening port of your MQTT server or MQTT broker
-#define MQTT_CLIENT_ID        "Device_ID"    // the ID of yourself, any string is OK,client would use this ID register itself to MQTT server
+#define MQTT_CLIENT_ID        "shutter-sensor"    // the ID of yourself, any string is OK,client would use this ID register itself to MQTT server
 #define MQTT_USER            "user" // your MQTT login name, if MQTT server allow anonymous login,any string is OK, otherwise, please input valid login name which you had registered
 #define MQTT_PASS            "pass" // you MQTT login password, same as above
-#define STA_SSID "ASUS2"    // your AP/router SSID to config your device networking
+#define STA_SSID "ASUS"    // your AP/router SSID to config your device networking
 #define STA_PASS "nyuszika" // your AP/router password
+
+//#define STA_SSID "Albirt_Wifi_2.4G"
+//#define STA_PASS "12345678ABC"
+
 
 #define DEFAULT_SECURITY    NO_TLS      // very important: you must config DEFAULT_SECURITY for SSL/TLS
 

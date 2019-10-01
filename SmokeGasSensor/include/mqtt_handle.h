@@ -4,6 +4,12 @@
 #ifndef ESP8266_NONOS_DEV_MQTT_HANDLE_H
 #define ESP8266_NONOS_DEV_MQTT_HANDLE_H
 
+#define MQTT_LWT_TOPIC          "sensor/smoke.status"
+#define MQTT_DISCONNECT_MESSAGE "Offline"
+#define MQTT_CONNECT_MESSAGE    "Online"
+
+#define MQTT_SMOKE_TOPIC        "sensor/smoke.alert"
+
 typedef enum
 {
     MQTT_INIT,

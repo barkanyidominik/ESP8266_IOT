@@ -1,0 +1,1 @@
+sudo chmod 0666 /dev/ttyS10 && esptool.py --port /dev/ttyS10 erase_flash

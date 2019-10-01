@@ -51,6 +51,9 @@ void mqttConnectedCb(uint32_t *args)
     INFO("MQTT CONNECTED CB!!!!\n\r");
     mqttHandler.mqttState = MQTT_CONNECTED;
     MQTT_Client* client = (MQTT_Client*)args;
+
+    MQTT_Publish(client, MQTT_LWT_TOPIC, MQTT_CONNECT_MESSAGE, sizeof(MQTT_CONNECT_MESSAGE), 0, 1);
+
     INFO("MQTT: Connected\r\n");
 }
 
@@ -95,42 +98,26 @@ ICACHE_FLASH_ATTR void setMqttConnectedCb(void *cb)
 ICACHE_FLASH_ATTR void mqttPublishLight(char* data)
 {
     INFO("Publish data: %s!!!", data);
-    MQTT_Publish(&mqttClient, "light", data, 3, 0, 0);
+    MQTT_Publish(&mqttClient, MQTT_LIGHT_TOPIC, data, strlen(data), 0, 0);
+    MQTT_Publish(&mqttClient, MQTT_BRIGHTNESS_TOPIC, data, strlen(data), 0, 0);
 }
 
 ICACHE_FLASH_ATTR void mqttInit(void)
 {
-    //uart_init(BIT_RATE_115200, BIT_RATE_115200);
     os_delay_us(60000);
     mqttHandler.mqttState = MQTT_INIT;
 
     CFG_Load();
 
-    //MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, sysCfg.security);
-    //  //MQTT_InitConnection(&mqttClient, "192.168.1.60", 1883, 0);
+    MQTT_InitConnection(&mqttClient, MQTT_HOST, MQTT_PORT, 0);
 
-    //MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
-    //  //MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 120, 1);
+    MQTT_InitClient(&mqttClient, MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS, 60, 1);
 
-    //MQTT_InitLWT(&mqttClient, "/lwt", "offline", 0, 0);
-    //MQTT_OnConnected(&mqttClient, mqttConnectedCb);
-    //MQTT_OnDisconnected(&mqttClient, mqttDisconnectedCb);
-    //MQTT_OnPublished(&mqttClient, mqttPublishedCb);
-    //MQTT_OnData(&mqttClient, mqttDataCb);
-
-    MQTT_InitConnection(&mqttClient, "192.168.100.33", 1883, 0);
-
-    MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 60, 1);
-
-    MQTT_InitLWT(&mqttClient, "light.status", "Offline", 0, 1);
+    MQTT_InitLWT(&mqttClient, MQTT_LWT_TOPIC, MQTT_LWT_MESSAGE, 0, 1);
 
     MQTT_OnConnected(&mqttClient, mqttConnectedCb);
 
     WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
-
-    MQTT_Publish(&mqttClient, "light.status", "Online", 6, 0, 1);
-
-    MQTT_Subscribe(&mqttClient, "light.teszt", 1);
 
     MQTT_OnData(&mqttClient, mqttDataCb);
 

@@ -1,0 +1,1 @@
+sudo chmod 0666 /dev/ttyUSB0 && sudo gtkterm -p /dev/ttyUSB0 -s 115200

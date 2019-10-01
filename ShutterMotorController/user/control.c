@@ -16,8 +16,10 @@ static uint8_t positionPercent;
 
 void set_position_callback(void*);
 static void (*position_callback)(uint8_t);
+static void mqtt_realtime_position_callback();
 
 static os_timer_t limit_timer;
+static os_timer_t mqtt_realtime_position_timer;
 
 
 static void reach_the_limit() {
@@ -25,6 +27,7 @@ static void reach_the_limit() {
     MovementState movementState = get_movementState();
     movement_stop();
     os_timer_disarm(&limit_timer);
+    os_timer_disarm(&mqtt_realtime_position_timer);
 
     if (movementState == UP)
     {
@@ -94,6 +97,7 @@ static void upButton_intr_handler()
             if(position - MAX_LIMIT_DIFFERENCE_US > 0){
                 DEBUG("\t\tUP START\n");
                 os_timer_arm(&limit_timer, position / 1000, 0);
+                os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
                 up_movement_start();
             }
         }
@@ -123,6 +127,7 @@ static void downButton_intr_handler()
             if(position + MAX_LIMIT_DIFFERENCE_US < limit){
                 DEBUG("\t\tDOWN START\n");
                 os_timer_arm(&limit_timer, (limit - position) / 1000, 0);
+                os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
                 down_movement_start();
             }
         }
@@ -190,6 +195,7 @@ ICACHE_FLASH_ATTR void control_mode_init(int32_t limit_us)
     os_timer_setfn(&buttons.downButton_timer, (os_timer_func_t*) set_downButton_intr, 0);
 
     os_timer_setfn(&limit_timer, (os_timer_func_t*) reach_the_limit, 0);
+    os_timer_setfn(&mqtt_realtime_position_timer, (os_timer_func_t*) mqtt_realtime_position_callback, 0);
 
     limit = limit_us;
     position = limit_us;
@@ -210,6 +216,7 @@ ICACHE_FLASH_ATTR void up_mqtt_handler()
         if(position - MAX_LIMIT_DIFFERENCE_US > 0){
             DEBUG("\t\tUP START by MQTT\n");
             os_timer_arm(&limit_timer, position / 1000, 0);
+            os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
             up_movement_start();
         }
     }
@@ -228,6 +235,7 @@ ICACHE_FLASH_ATTR void down_mqtt_handler()
         if(position + MAX_LIMIT_DIFFERENCE_US < limit){
             DEBUG("\t\tDOWN START by MQTT\n");
             os_timer_arm(&limit_timer, (limit - position) / 1000, 0);
+            os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
             down_movement_start();
         }
     }
@@ -250,6 +258,7 @@ ICACHE_FLASH_ATTR void set_position_mqtt_handler(uint16_t percent)
                 DEBUG("\t\tDOWN START to %d position by MQTT\n", desiredPosition);
                 movement.down_offset = WDEV_NOW();
                 os_timer_arm(&limit_timer, (desiredPosition - position) / 1000, 0);
+                os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
                 down_movement_start();
             }
             else if(position - MAX_LIMIT_DIFFERENCE_US > desiredPosition)
@@ -257,6 +266,7 @@ ICACHE_FLASH_ATTR void set_position_mqtt_handler(uint16_t percent)
                 DEBUG("\t\tUP START to %d position by MQTT\n", desiredPosition);
                 movement.up_offset = WDEV_NOW();
                 os_timer_arm(&limit_timer, (position - desiredPosition) / 1000, 0);
+                os_timer_arm(&mqtt_realtime_position_timer, 500, 1);
                 up_movement_start();
             }
         }
@@ -269,6 +279,28 @@ ICACHE_FLASH_ATTR void set_position_mqtt_handler(uint16_t percent)
     else
     {
         DEBUG("\t\t%d nem esik 0-100% közé!\n", percent);
+    }
+}
+
+static void mqtt_realtime_position_callback()
+{
+    MovementState movementState = get_movementState();
+    uint32_t realtime_position = position;
+
+    if (movementState == UP)
+    {
+        realtime_position -= WDEV_NOW() - movement.up_offset;
+    }
+    else if(movementState == DOWN)
+    {
+        realtime_position += WDEV_NOW() - movement.down_offset;
+    }
+
+    uint8_t realtime_positionPercent = round(((float)realtime_position / limit) * 100);
+
+    if(position_callback)
+    {
+        position_callback(realtime_positionPercent);
     }
 }
 

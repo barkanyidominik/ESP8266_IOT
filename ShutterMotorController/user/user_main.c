@@ -86,23 +86,8 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
 	}
 }
 
-//extern void __real_system_restart_local();
-
-void ICACHE_FLASH_ATTR safety_first()
-{
-    //Ide jönnek a biztonsági intézkedések
-    // Pl. GPIO_REG_READ(GPIO_OUT_ADDRESS) & BIT(RELAY1) és GPIO_REG_READ(GPIO_OUT_ADDRESS) & BIT(RELAY2) is aktív valami hiba folytán, akkor azonnal megszakítjuk a működést.)
-    //     Ha a limitet meghaladtuk valami hiba következtében, akkor azonnal megszakítjuk a működést.
-
-    //Hiba esetén úgy szakítjuk meg a működést, hogy a Task függvényeit mellőzzük, hiszen onnan ered a hiba.
-    //DEBUG("CHECK");
-
-   // __real_system_restart_local();
-}
-
 void ICACHE_FLASH_ATTR main_task(os_event_t *e)
 {
-    safety_first();
     system_os_post(MAIN_TASK_PRIO, 0, 0 );
 }
 

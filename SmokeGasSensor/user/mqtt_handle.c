@@ -51,6 +51,9 @@ void mqttConnectedCb(uint32_t *args)
     INFO("MQTT CONNECTED CB!!!!\n\r");
     mqttHandler.mqttState = MQTT_CONNECTED;
     MQTT_Client* client = (MQTT_Client*)args;
+
+    MQTT_Publish(client, MQTT_LWT_TOPIC, MQTT_CONNECT_MESSAGE, sizeof(MQTT_CONNECT_MESSAGE), 1, 1);
+
     INFO("MQTT: Connected\r\n");
 }
 
@@ -94,28 +97,25 @@ ICACHE_FLASH_ATTR void setMqttConnectedCb(void *cb)
 ICACHE_FLASH_ATTR void mqttPublishSmoke(char* data)
 {
     INFO("Publish data: %s!!!", data);
-    MQTT_Publish(&mqttClient, "smoke", data, 1, 1, 0);
+    MQTT_Publish(&mqttClient, MQTT_SMOKE_TOPIC, data, 1, 1, 0);
 }
 
 ICACHE_FLASH_ATTR void mqttInit(void)
 {
-    //uart_init(BIT_RATE_115200, BIT_RATE_115200);
     os_delay_us(60000);
     mqttHandler.mqttState = MQTT_INIT;
 
     CFG_Load();
 
-    MQTT_InitConnection(&mqttClient, "192.168.1.60", 1883, 0);
+    MQTT_InitConnection(&mqttClient, MQTT_HOST, MQTT_PORT, 0);
 
-    MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 60, 1);
+    MQTT_InitClient(&mqttClient, MQTT_CLIENT_ID, MQTT_USER, MQTT_PASS, 60, 1);
 
-    MQTT_InitLWT(&mqttClient, "smoke.status", "Offline", 1, 1);
+    MQTT_InitLWT(&mqttClient, MQTT_LWT_TOPIC, MQTT_DISCONNECT_MESSAGE, 1, 1);
 
     MQTT_OnConnected(&mqttClient, mqttConnectedCb);
 
     WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
-
-    MQTT_Publish(&mqttClient, "smoke.status", "Online", 6, 1, 1);
 
     INFO("\r\nSystem started ...\r\n");
 }

@@ -14,6 +14,7 @@ static void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, co
 static void position_callback(uint8_t percent);
 
 static char printbuf[32];
+static int32_t limit;
 
 
 static void control_mode_stop_cb(int32_t position)
@@ -33,9 +34,9 @@ static void control_mode_up_cb()
 
 ICACHE_FLASH_ATTR static void control_mode()
 {
-    control_mode_init(10000000);
+    control_mode_init(limit);
     set_position_callback(position_callback);
-
+/*
     uint32_t _data = 123456;
     uint32_t _size = sizeof(_data);
     uint32_t _sector = 0x8C;
@@ -44,7 +45,7 @@ ICACHE_FLASH_ATTR static void control_mode()
             os_printf("SIKER");
         }
     }
-
+*/
 /*
     uint32_t _sector = 0x8C;
     uint32_t _data;
@@ -55,9 +56,11 @@ ICACHE_FLASH_ATTR static void control_mode()
 
 }
 
-static void programming_mode_cb()
+static void programming_mode_cb(int32_t new_limit)
 {
     DEBUG("programming_mode_cb()");
+    limit = new_limit;
+    control_mode();
 }
 
 ICACHE_FLASH_ATTR static void programming_mode()
@@ -69,14 +72,13 @@ ICACHE_FLASH_ATTR void controller_init()
 {
     mqttInit(mqttDataCb);
     init_movement();
-    //programming_mode()
-    control_mode();
+    programming_mode();
 }
 
 static void position_callback(uint8_t percent)
 {
     os_sprintf(printbuf, "%d", percent);
-    mqttPublish("shutter.position", printbuf);
+    mqttPublish(MQTT_POSITION_TOPIC, printbuf);
 }
 
 static void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *data, uint32_t data_len)
@@ -92,18 +94,18 @@ static void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, co
 
     os_printf("%s\t", topicBuf);
 
-    if(!strcmp(topicBuf, "shutter.control"))
+    if(!strcmp(topicBuf, MQTT_CONTROL_MOVE_TOPIC))
     {
-        if(!strcmp(dataBuf, "1"))
+        if(!strcmp(dataBuf, "0"))
         {
             up_mqtt_handler();
         }
-        else if(!strcmp(dataBuf, "0"))
+        else if(!strcmp(dataBuf, "1"))
         {
             down_mqtt_handler();
         }
     }
-    else if(!strcmp(topicBuf, "shutter.position.control"))
+    else if(!strcmp(topicBuf, MQTT_CONTROL_POSITION_TOPIC))
     {
         int16_t num = strtol(dataBuf, NULL, 10);
         os_printf("%d\n", num);
